@@ -138,11 +138,12 @@ d=np.arange(146)
 
 
 # #EMCEE FIT DISTRIBUZIONE POISSONIANA
-
-pos = [1.78e6, 0.0741, -75.5] + 1.e-2*np.random.randn(16,3)
+thetan1 = [2.62e5, 0.068, -149.5]
+thetan2 = [1.78e6, 0.074, -75.5]
+pos = thetan1 + 1.e-2*np.random.randn(16,3)
 nwalkers, ndim = pos.shape
 
-sampler = emcee.EnsembleSampler(nwalkers, ndim, log_posteriorP, args=[d, n2]) #Seleziona il set di dati:n, n1 o n2
+sampler = emcee.EnsembleSampler(nwalkers, ndim, log_posteriorP, args=[d, n1]) #Seleziona il set di dati:n, n1 o n2
 sampler.run_mcmc(pos, 3000, progress=True);
 
 fig, axes = plt.subplots(3, figsize=(10,7), sharex=True)
@@ -162,8 +163,7 @@ flat_blob = sampler.get_blobs(flat=True, discard=100)
 #Max_Likelihood = np.argmax(flat_blob[:,1])
 fig = corner.corner(flat_samples, labels=labels)
 
-theta=[1.78e6, 0.0741, -75.5]
-fit_y = diff_logistic_function(theta, d)
+fit_y = diff_logistic_function(thetan1, d)
 plt.figure()
-plt.plot(d, n2, 'o')
+plt.plot(d, n1, 'o')
 plt.plot(d, fit_y)
